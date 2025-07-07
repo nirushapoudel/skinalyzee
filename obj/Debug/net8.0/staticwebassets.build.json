@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "NNXExBqWshA65aILmf6Uv5xTLgLFpPRwcgLiBkCG+Q8=",
+  "Source": "Skinalyze.API",
+  "BasePath": "_content/Skinalyze.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
