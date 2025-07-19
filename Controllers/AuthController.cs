@@ -7,12 +7,12 @@ namespace Skinalyze.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController : Controller
+    public class authController : Controller
     {
         private readonly AppDbContext _context;
         private readonly PasswordHasher<User> _passwordHasher;
 
-        public AuthController(AppDbContext context)
+        public authController(AppDbContext context)
         {
             _context = context;
             _passwordHasher = new PasswordHasher<User>();
@@ -34,14 +34,14 @@ namespace Skinalyze.API.Controllers
             }
             var user = new User
             {
-                FirstName = registerDto.firstName,
-                LastName = registerDto.lastName,
+                firstName = registerDto.firstName,
+                lastName = registerDto.lastName,
                 Email = registerDto.email,
                 password = registerDto.password,
                 
             };
 
-            registerDto.password = _passwordHasher.HashPassword(user, registerDto.password);
+            user.password = _passwordHasher.HashPassword(user, registerDto.password);
 
 
             _context.Users.Add(user);
@@ -52,16 +52,16 @@ namespace Skinalyze.API.Controllers
 
         // POST: api/auth/login
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] User loginUser)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Email == loginUser.Email);
+                .FirstOrDefaultAsync(u => u.Email == loginDto.email);
 
             if (user == null)
                 return Unauthorized("Invalid email");
             
             // Verify hashed password
-            var result = _passwordHasher.VerifyHashedPassword(user, user.password, loginUser.password);
+            var result = _passwordHasher.VerifyHashedPassword(user, user.password, loginDto.password);
             if (result == PasswordVerificationResult.Failed)
                 return Unauthorized("Invalid email or password");
 
@@ -71,15 +71,12 @@ namespace Skinalyze.API.Controllers
                 User = new
                 {
                     user.Id,
-                    user.FirstName,
-                    user.LastName,
+                    user.firstName,
+                    user.lastName,
                     user.Email,
                     user.password,
                     //user.Confirmpassword
                 }
-
-
-
             });
         }
 
@@ -91,6 +88,12 @@ namespace Skinalyze.API.Controllers
             public string password { get; set; }
             public string confirmPassword { get; set; }
 
+        }
+
+        public class LoginDto
+        {
+            public string email { get; set; }
+            public string password { get; set; }
         }
     }
 }

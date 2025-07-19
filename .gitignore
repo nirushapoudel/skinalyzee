@@ -1,0 +1,21 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Skinalyze.API.sln
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Build output
+bin/
+obj/
+
+# Others
+*.vsidx
+*.dbmdl
+*.log
+*.tlog
+*.cache
+*.pdb
