@@ -16,9 +16,9 @@ namespace Skinalyze.API.Controllers
             _context = context;
         }
 
-        // ✅ GET: api/products?page=1&pageSize=10
+        // ✅ GET: api/products?page=1&pageSize=15
         [HttpGet]
-        public async Task<IActionResult> GetAll(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> GetAll(int page = 1, int pageSize = 15)
         {
             var total = await _context.products.CountAsync();
             var data = await _context.products
@@ -66,7 +66,8 @@ namespace Skinalyze.API.Controllers
             var data = await _context.products
                 .Where(p =>
                     p.Brand.ToLower().Contains(query.ToLower()) ||
-                    p.ProductName.ToLower().Contains(query.ToLower()))
+                    p.ProductName.ToLower().Contains(query.ToLower()) |
+                    p.Category.ToLower().Contains(query.ToLower()))
                 .ToListAsync();
 
             return Ok(data);
@@ -78,14 +79,14 @@ namespace Skinalyze.API.Controllers
         public async Task<IActionResult> RecommendBySkinType(string type)
         {
             if (string.IsNullOrEmpty(type))
-                return BadRequest("Skin type must be provided.");
+                return BadRequest(new { message = "Skin type must be provided." });
 
             var data = await _context.products
                 .Where(p => p.SkinType.ToLower().Contains(type.ToLower()))
                 .ToListAsync();
-
+            // Always return valid JSON
             if (!data.Any())
-                return NotFound("No products found for this skin type.");
+                return Ok(new List<products>()); // Return empty list instead of plain string
 
             return Ok(data);
         }
