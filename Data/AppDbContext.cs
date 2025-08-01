@@ -11,6 +11,7 @@ namespace Skinalyze.API.Data
 
         public DbSet<products> products { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<SkinQuestionnaire> SkinQuestionnaires { get; set; }
 
     }
 
